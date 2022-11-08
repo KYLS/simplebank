@@ -6,13 +6,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/KYLS/simplebank/util"
 	"github.com/stretchr/testify/require"
-	"github.com/techschool/simplebank/util"
 )
 
 func createRandomAccount(t *testing.T) Account {
+	user := createRandomUser((t))
+
 	arg := CreateAccountParams{
-		Owner:    util.RandomOwner(),
+		Owner:    user.Username,
 		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
