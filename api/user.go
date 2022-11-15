@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"log"
 	"net/http"
 	"time"
 
@@ -89,28 +90,31 @@ type loginUserResponse struct {
 }
 
 func (server *Server) loginUser(ctx *gin.Context) {
+	log.Printf("login user")
 	var req loginUserRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-
+	log.Printf("login user 1")
 	user, err := server.store.GetUser(ctx, req.Username)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}
+		log.Printf("login user 2")
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
+	log.Printf("login user 3")
 	err = util.CheckPassword(req.Password, user.HashedPassword)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
-
+	log.Printf("login user 4")
 	accessToken, accessPayload, err := server.tokenMaker.CreateToken(
 		user.Username,
 		server.config.AccessTokenDuration,
@@ -119,13 +123,13 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-
+	log.Printf("login user 5")
 	refreshToken, refreshPayload, err := server.tokenMaker.CreateToken(user.Username, server.config.RefeshTokenDuration)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-
+	log.Printf("login user 6")
 	session, err := server.store.CreateSession(ctx, db.CreateSessionParams{
 		ID:           refreshPayload.ID,
 		Username:     user.Username,
@@ -139,7 +143,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-
+	log.Printf("login user 7")
 	rsp := loginUserResponse{
 		SessionID:             session.ID,
 		AccessToken:           accessToken,
@@ -148,5 +152,6 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		RefreshTokenExpiresAt: refreshPayload.ExpiredAt,
 		User:                  newUserResponse(user),
 	}
+	log.Printf("login user 8")
 	ctx.JSON(http.StatusOK, rsp)
 }

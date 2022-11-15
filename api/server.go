@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"log"
 
 	db "github.com/KYLS/simplebank/db/sqlc"
 	"github.com/KYLS/simplebank/token"
@@ -42,7 +43,7 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 
 func (server *Server) setupRouter() {
 	router := gin.Default()
-
+	log.Printf("setupRouter")
 	router.POST("/users", server.CreateUser)
 	router.POST("/users/login", server.loginUser)
 	router.POST("/tokens/renew_access", server.renewAccessToken)
