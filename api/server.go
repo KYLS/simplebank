@@ -62,7 +62,7 @@ func (server *Server) setupRouter() {
 // Start runs the HTTP server on specific address
 func (server *Server) Start(address string) error {
 	log.Printf("Start Server with address: %s", address)
-	return server.router.Run("0.0.0.0:8080")
+	return server.router.Run(address)
 }
 func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
