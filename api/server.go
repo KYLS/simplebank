@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"log"
-	"net/http"
 
 	db "github.com/KYLS/simplebank/db/sqlc"
 	"github.com/KYLS/simplebank/token"
@@ -46,7 +45,9 @@ func (server *Server) setupRouter() {
 	router := gin.Default()
 	log.Printf("setupRouter")
 	router.POST("/users", server.CreateUser)
-	router.POST("/users/login", server.loginUser)
+	router.POST("/users/login", func(ctx *gin.Context) {
+		log.Fatal("fffffffffffffffff")
+	})
 	router.POST("/tokens/renew_access", server.renewAccessToken)
 
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
@@ -62,7 +63,7 @@ func (server *Server) setupRouter() {
 
 // Start runs the HTTP server on specific address
 func (server *Server) Start(address string) error {
-	return http.ListenAndServe(address, server.router)
+	return server.router.Run(address)
 }
 func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
