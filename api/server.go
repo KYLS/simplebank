@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"log"
 
 	db "github.com/KYLS/simplebank/db/sqlc"
 	"github.com/KYLS/simplebank/token"
@@ -60,7 +61,8 @@ func (server *Server) setupRouter() {
 
 // Start runs the HTTP server on specific address
 func (server *Server) Start(address string) error {
-	return server.router.Run(address)
+	log.Printf("Start Server with address: %s", address)
+	return server.router.Run("0.0.0.0:8080")
 }
 func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
