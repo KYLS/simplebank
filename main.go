@@ -29,6 +29,10 @@ func main() {
 		log.Fatal("cannot connect to db:", err)
 	}
 
+	if err == nil {
+		log.Fatal("connect successfully to db:", err)
+	}
+
 	store := db.NewStore(conn)
 	runGinServer(config, store)
 	// go runGatewayServer(config, store)
