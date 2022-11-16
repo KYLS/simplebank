@@ -7,6 +7,7 @@ import (
 
 	db "github.com/KYLS/simplebank/db/sqlc"
 	"github.com/KYLS/simplebank/token"
+	"github.com/KYLS/simplebank/util"
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
@@ -27,7 +28,7 @@ func (server *Server) CreateAccount(ctx *gin.Context) {
 	arg := db.CreateAccountParams{
 		Owner:    authPayload.Username,
 		Currency: req.Currency,
-		Balance:  0,
+		Balance:  util.RandomInt(100, 1000), //this for test
 	}
 
 	account, err := server.store.CreateAccount(ctx, arg)
