@@ -10,6 +10,12 @@ INSERT INTO entries (
 SELECT * FROM entries
 WHERE id = $1 LIMIT 1;
 
+-- name: GetEntries :many
+SELECT * FROM entries
+WHERE account_id = $1
+LIMIT $2
+OFFSET $3;
+
 -- name: ListEntries :many
 SELECT * FROM entries
 ORDER BY id

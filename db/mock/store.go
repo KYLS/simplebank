@@ -198,6 +198,21 @@ func (mr *MockStoreMockRecorder) GetAccountForUpdate(arg0, arg1 interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAccountForUpdate", reflect.TypeOf((*MockStore)(nil).GetAccountForUpdate), arg0, arg1)
 }
 
+// GetEntries mocks base method.
+func (m *MockStore) GetEntries(arg0 context.Context, arg1 db.GetEntriesParams) ([]db.Entry, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetEntries", arg0, arg1)
+	ret0, _ := ret[0].([]db.Entry)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetEntries indicates an expected call of GetEntries.
+func (mr *MockStoreMockRecorder) GetEntries(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEntries", reflect.TypeOf((*MockStore)(nil).GetEntries), arg0, arg1)
+}
+
 // GetEntry mocks base method.
 func (m *MockStore) GetEntry(arg0 context.Context, arg1 int64) (db.Entry, error) {
 	m.ctrl.T.Helper()
