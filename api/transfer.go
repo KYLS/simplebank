@@ -30,6 +30,12 @@ func (server *Server) CreateTransfer(ctx *gin.Context) {
 		return
 	}
 
+	if fromAccount.Balance < req.Amount {
+		err := errors.New("you don't have enough money!")
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	if fromAccount.Owner != authPayload.Username {
 		err := errors.New("from account doesn't belong to the authenticated user")
